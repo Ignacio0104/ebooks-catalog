@@ -3,10 +3,11 @@
 import { useCart } from "@/contexts/CartContext";
 
 export function CartIcon() {
-  const { items } = useCart();
+  const { items, openCart } = useCart();
 
   return (
     <button
+      onClick={openCart}
       aria-label="Ver carrito"
       className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm active:scale-95 transition-transform"
     >

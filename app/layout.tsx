@@ -1,5 +1,6 @@
 import { Baloo_2, Nunito } from "next/font/google";
 import { CartProvider } from "@/contexts/CartContext";
+import { CartModal } from "@/components/CartModal";
 import "./globals.css";
 
 const baloo = Baloo_2({
@@ -28,7 +29,10 @@ export default function RootLayout({
       <body
         className={`${baloo.variable} ${nunito.variable} font-body bg-cream text-plum`}
       >
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          {children}
+          <CartModal />
+        </CartProvider>
       </body>
     </html>
   );

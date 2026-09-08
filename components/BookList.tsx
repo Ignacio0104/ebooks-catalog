@@ -6,6 +6,7 @@ import { Book } from "@/contexts/CartContext";
 import { BookCard } from "./BookCard";
 import { BookGridSkeleton } from "./BookGridSkeleton";
 import { BookModal } from "./BookModal";
+import { GenrePills } from "./GenrePills";
 
 type Props = {
   initialBooks: Book[];
@@ -16,34 +17,50 @@ export function BookList({ initialBooks, query }: Props) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Book | null>(null);
-  const debouncedQuery = useDebounce(query, 1000);
+  const [genres, setGenres] = useState<string[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const debouncedQuery = useDebounce(query, 500);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    if (isFirstRender.current) {
+    fetch("/api/genres")
+      .then((res) => res.json())
+      .then(setGenres);
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current && selectedGenre === null) {
       isFirstRender.current = false;
       return;
     }
 
     const fetchBooks = async () => {
       setLoading(true);
-      const res = await fetch(
-        `/api/books?q=${encodeURIComponent(debouncedQuery)}`,
-      );
+      const params = new URLSearchParams();
+      if (debouncedQuery) params.set("q", debouncedQuery);
+      if (selectedGenre) params.set("genre", selectedGenre);
+
+      const res = await fetch(`/api/books?${params.toString()}`);
       const data = await res.json();
       setBooks(data);
       setLoading(false);
     };
 
     fetchBooks();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, selectedGenre]);
 
-  const isSearching = debouncedQuery.trim() !== "";
+  const isFiltering = debouncedQuery.trim() !== "" || selectedGenre !== null;
 
   return (
-    <section className="mt-6">
-      {!isSearching && (
-        <h2 className="px-4 font-display text-xl font-bold sm:px-8">
+    <section className="mt-2">
+      <GenrePills
+        genres={genres}
+        selected={selectedGenre}
+        onSelect={setSelectedGenre}
+      />
+
+      {!isFiltering && (
+        <h2 className="px-4 font-display text-xl font-bold sm:px-8 mt-4">
           Últimos libros
         </h2>
       )}

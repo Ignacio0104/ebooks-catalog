@@ -17,7 +17,12 @@ type CartContextType = {
   addToCart: (book: Book) => void;
   removeFromCart: (id: string) => void;
   isInCart: (id: string) => boolean;
+  clearCart: () => void;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
 };
+
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -30,6 +35,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [];
     }
   });
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(items));
@@ -47,9 +54,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const isInCart = (id: string) => items.some((b) => b.id === id);
 
+  const clearCart = () => setItems([]);
+
   return (
     <CartContext.Provider
-      value={{ items, addToCart, isInCart, removeFromCart }}
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        isInCart,
+        clearCart,
+        isCartOpen,
+        openCart: () => setIsCartOpen(true),
+        closeCart: () => setIsCartOpen(false),
+      }}
     >
       {children}
     </CartContext.Provider>

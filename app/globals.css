@@ -10,3 +10,11 @@
   --font-display: var(--font-baloo);
   --font-body: var(--font-nunito);
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
