@@ -4,9 +4,8 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
 import { BookList } from "@/components/BookList";
-import { Book } from "@/contexts/CartContext";
 
-export default function Home({ initialBooks }: { initialBooks: Book[] }) {
+export default function Home() {
   const [query, setQuery] = useState("");
 
   return (
@@ -15,7 +14,7 @@ export default function Home({ initialBooks }: { initialBooks: Book[] }) {
       <div className="mt-2">
         <SearchBar value={query} onChange={setQuery} />
       </div>
-      <BookList initialBooks={initialBooks} query={query} />
+      <BookList query={query} />
     </main>
   );
 }

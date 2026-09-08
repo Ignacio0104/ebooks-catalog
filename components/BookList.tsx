@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Book } from "@/contexts/CartContext";
 import { BookCard } from "./BookCard";
@@ -9,31 +9,26 @@ import { BookModal } from "./BookModal";
 import { GenrePills } from "./GenrePills";
 
 type Props = {
-  initialBooks: Book[];
   query: string;
 };
 
-export function BookList({ initialBooks, query }: Props) {
+export function BookList({ query }: Props) {
   const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Book | null>(null);
   const [genres, setGenres] = useState<string[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const debouncedQuery = useDebounce(query, 500);
-  const isFirstRender = useRef(true);
 
+  // Géneros: solo hace falta traerlos una vez
   useEffect(() => {
     fetch("/api/genres")
       .then((res) => res.json())
       .then(setGenres);
   }, []);
 
+  // Libros: se dispara siempre, incluida la carga inicial
   useEffect(() => {
-    if (isFirstRender.current && selectedGenre === null) {
-      isFirstRender.current = false;
-      return;
-    }
-
     const fetchBooks = async () => {
       setLoading(true);
       const params = new URLSearchParams();
