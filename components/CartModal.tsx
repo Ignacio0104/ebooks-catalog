@@ -77,11 +77,11 @@ export function CartModal() {
 
   return (
     <div
-      className="fixed h-screen inset-0 z-50 flex items-end sm:items-center justify-center bg-plum/40 p-0 sm:p-4"
+      className="fixed h-screen inset-0 z-50 flex items-center justify-center bg-plum/40 p-0 sm:p-4"
       onClick={handleClose}
     >
       <div
-        className="flex w-full sm:max-w-md flex-col rounded-t-3xl sm:rounded-3xl bg-cream max-h-[85vh]"
+        className="flex w-full sm:max-w-md flex-col rounded-3xl bg-cream max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 pt-6">
