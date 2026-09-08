@@ -6,8 +6,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { BookList } from "@/components/BookList";
 import { Book } from "@/contexts/CartContext";
 
-export const dynamic = "force-dynamic";
-
 export default function Home({ initialBooks }: { initialBooks: Book[] }) {
   const [query, setQuery] = useState("");
 
